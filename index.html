@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special For You ✨</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #ffeef2; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); width: 100%; max-width: 400px; text-align: center; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .icon { font-size: 50px; margin-bottom: 20px; display: inline-block; }
+        h2 { color: #ff4a75; font-size: 1.3rem; line-height: 1.6; margin-bottom: 25px; }
+        input[type="text"], textarea { width: 100%; padding: 12px 15px; border: 2px solid #ffd0da; border-radius: 12px; margin-bottom: 20px; font-size: 1rem; outline: none; }
+        textarea { resize: none; height: 100px; }
+        button { background-color: #ff4a75; color: white; border: none; padding: 12px 30px; font-size: 1rem; font-weight: bold; border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 74, 117, 0.3); }
+        .summary-box { background: #fff5f7; border: 2px dashed #ffb6c1; padding: 15px; border-radius: 12px; text-align: left; margin-top: 15px; font-size: 0.95rem; color: #555; }
+        .summary-box strong { color: #ff4a75; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="page active" id="page1">
+            <span class="icon">🎁</span>
+            <h2>haii, sorry ya titipannya belum bisa, jadi sebagai gantinya aku mau ngasi kamu sesuatu</h2>
+            <button onclick="nextPage(2)">Mauu ✨</button>
+        </div>
+        <div class="page" id="page2">
+            <span class="icon">🍕</span>
+            <h2>mau makan apa hari ini??</h2>
+            <input type="text" id="inputMakanan" placeholder="Tulis makanan favorit kamu...">
+            <button onclick="saveMakanan()">Lanjut ➡️</button>
+        </div>
+        <div class="page" id="page3">
+            <span class="icon">📍</span>
+            <h2>alamat kamu, usahain makannya yang ada di goofood, grabfood, atau shoopefood ya</h2>
+            <textarea id="inputAlamat" placeholder="Tulis alamatmu yang lengkap ya..."></textarea>
+            <button onclick="saveAlamat()">Kirim 🚀</button>
+        </div>
+        <div class="page" id="page4">
+            <span class="icon">🛵💨</span>
+            <h2>tunggu makanan kamu dateng yaaa</h2>
+            <p style="color: #28a745; font-size: 0.95rem; margin: 10px 0; font-weight: bold;">✨ Pilihan kamu udah otomatis disalin! ✨</p>
+            <p style="color: #666; font-size: 0.85rem; margin-bottom: 15px;">Tinggal buka WhatsApp terus tinggal paste/tempel yaa</p>
+            <div class="summary-box">
+                📌 <strong>Menu:</strong> <span id="resMakanan">-</span><br>
+                🏠 <strong>Alamat:</strong> <span id="resAlamat">-</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let dataOrder = { makanan: '', alamat: '' };
+        function nextPage(pageNum) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('page' + pageNum).classList.add('active');
+        }
+        function saveMakanan() {
+            const val = document.getElementById('inputMakanan').value.trim();
+            if (!val) return alert("Isi sek co! 😜");
+            dataOrder.makanan = val;
+            nextPage(3);
+        }
+        function saveAlamat() {
+            const val = document.getElementById('inputAlamat').value.trim();
+            if (!val) return alert("Alamatnya jangan lupa co! 😂");
+            dataOrder.alamat = val;
+            document.getElementById('resMakanan').innerText = dataOrder.makanan;
+            document.getElementById('resAlamat').innerText = dataOrder.alamat;
+            const teks = `Nih pilihan aku co! ✨\n\n📌 Menu: ${dataOrder.makanan}\n🏠 Alamat: ${dataOrder.alamat}`;
+            navigator.clipboard.writeText(teks).then(() => nextPage(4)).catch(() => {
+                const dummy = document.createElement("textarea");
+                document.body.appendChild(dummy); dummy.value = teks; dummy.select();
+                document.execCommand("copy"); document.body.removeChild(dummy);
+                nextPage(4);
+            });
+        }
+    </script>
+</body>
+</html>
